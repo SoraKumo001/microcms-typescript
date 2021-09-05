@@ -4,8 +4,10 @@ import path from 'path';
 
 interface MicroCMSFieldType {
   fieldId: string;
+  name: string;
   kind:
     | 'text'
+    | 'textArea'
     | 'number'
     | 'richEditor'
     | 'select'
@@ -40,6 +42,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
     const { kind, required } = fields;
     const types = {
       text: () => 'string',
+      textArea: () => 'string',
       richEditor: () => 'string',
       number: () => 'number',
       select: () => {
@@ -52,7 +55,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       relationList: () => 'string[]',
       boolean: () => 'boolean',
       date: () => 'string',
-      media: () => '{url: string, width: number, height: number}',
+      media: () => '{ url: string, width: number, height: number }',
       custom: () => `${name}_${customs[fields.customFieldCreatedAt!]}`,
       repeater: () => {
         const { customFieldCreatedAtList: list } = fields;
@@ -65,10 +68,15 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
     };
     return types[kind]?.() || 'any';
   };
+  const getDoc = (fieald: MicroCMSFieldType) => {
+    return `/**\n * ${fieald.name}\n */`;
+  };
   const getFiealds = (fiealds: MicroCMSFieldType[]) => {
     return fiealds.map((fields) => {
       const { fieldId, required, kind } = fields;
-      return `${fieldId}${!required && kind === 'date' ? '?' : ''}: ${getKindType(fields)}`;
+      return `${getDoc(fields)}\n${fieldId}${
+        !required && kind === 'date' ? '?' : ''
+      }: ${getKindType(fields)}`;
     });
   };
 
@@ -83,16 +91,23 @@ const outSchema = (
   name: string,
   { mainSchema, customSchemas }: ReturnType<typeof convertSchema>
 ) => {
-  let buffer = `export interface ${name} {\n`;
-  mainSchema.forEach((fields) => {
-    buffer += `  ${fields};\n`;
+  let buffer =
+    `export interface ${name} {\n` +
+    '  id: string\n' +
+    '  createdAt: string\n' +
+    '  updatedAt: string\n' +
+    '  publishedAt: string\n' +
+    '  revisedAt: string\n';
+
+  mainSchema.forEach((field) => {
+    field.split('\n').forEach((s) => (buffer += `  ${s}\n`));
   });
   buffer += '}\n\n';
 
   Object.entries(customSchemas).forEach(([customName, fields]) => {
     buffer += `interface ${name}_${customName} {\n`;
-    fields.forEach((fields) => {
-      buffer += `  ${fields};\n`;
+    fields.forEach((field) => {
+      field.split('\n').forEach((s) => (buffer += `  ${s}\n`));
     });
     buffer += '}\n';
   });
