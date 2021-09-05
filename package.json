@@ -1,8 +1,12 @@
 {
   "name": "microcms-typescript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "license": "MIT",
+  "keywords": [
+    "microcms",
+    "typescript"
+  ],
   "bin": {
     "microcms-typescript": "dist/index.js"
   },
@@ -20,5 +24,7 @@
     "prettier": "^2.3.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
-  }
+  },
+  "repository": "https://github.com/SoraKumo001/microcms-typescript",
+  "author": "SoraKumo <info@croud.jp>"
 }

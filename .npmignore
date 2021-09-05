@@ -1,7 +1,8 @@
 /node_modules
 /src
-.gitignore
-tsconfig.json
 /test
-.eslintrc.json
 /schema
+tsconfig.json
+.eslintrc.json
+.prettierrc
+.gitignore
