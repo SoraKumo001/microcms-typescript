@@ -51,8 +51,8 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
         if (multipleSelect) return list!.length > 1 ? `(${str})[]` : `${str}[]`;
         return `[${str}]`;
       },
-      relation: () => (required ? 'string' : 'string | null'),
-      relationList: () => 'string[]',
+      relation: () => (required ? 'Reference<T,unknown>' : 'Reference<T,unknown | null>'),
+      relationList: () => 'Reference<T,unknown>[]',
       boolean: () => 'boolean',
       date: () => 'string',
       media: () => '{ url: string, width: number, height: number }',
@@ -73,10 +73,8 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
   };
   const getFiealds = (fiealds: MicroCMSFieldType[]) => {
     return fiealds.map((fields) => {
-      const { fieldId, required, kind } = fields;
-      return `${getDoc(fields)}\n${fieldId}${
-        !required && kind === 'date' ? '?' : ''
-      }: ${getKindType(fields)}`;
+      const { fieldId, required } = fields;
+      return `${getDoc(fields)}\n${fieldId}${!required ? '?' : ''}: ${getKindType(fields)}`;
     });
   };
 
@@ -91,18 +89,12 @@ const outSchema = (
   name: string,
   { mainSchema, customSchemas }: ReturnType<typeof convertSchema>
 ) => {
-  let buffer =
-    `export interface ${name} {\n` +
-    '  id: string\n' +
-    '  createdAt: string\n' +
-    '  updatedAt: string\n' +
-    '  publishedAt: string\n' +
-    '  revisedAt: string\n';
+  let buffer = `export type ${name}<T='get'> = Structure<\nT,\n{\n`;
 
   mainSchema.forEach((field) => {
     field.split('\n').forEach((s) => (buffer += `  ${s}\n`));
   });
-  buffer += '}\n\n';
+  buffer += '}>\n\n';
 
   Object.entries(customSchemas).forEach(([customName, fields]) => {
     buffer += `interface ${name}_${customName} {\n`;
@@ -111,7 +103,6 @@ const outSchema = (
     });
     buffer += '}\n';
   });
-
   return buffer;
 };
 
@@ -126,12 +117,33 @@ const main = (dir: string, dest?: string) => {
       typeNames.set(name, file);
       return true;
     });
-  let output = '';
+  let output = `type Reference<T, R> = T extends 'get' ? R : string | null;
+type DateType = {
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
+};\n
+type Structure<T, P> = T extends 'get'
+  ? { id: string } & DateType & Required<P>
+  : Partial<DateType> & (T extends 'patch' ? Partial<P> : P);\n\n`;
   typeNames.forEach(async (file, name) => {
     const schema = fs.readFileSync(path.resolve(dir, file));
     const s = convertSchema(name, JSON.parse(schema.toString()) as MicroCMSSchemaType);
     output += outSchema(name, s);
   });
+  output += `\nexport interface EndPoints {\n`;
+
+  ['get', 'post', 'put', 'patch'].forEach((method) => {
+    output += `  ${method}: {\n`;
+    typeNames.forEach((_, name) => {
+      output += `    ${name}: ${name}<'${method}'>\n`;
+    });
+    output += '  }\n';
+  });
+
+  output += '}\n';
+
   if (dest) fs.writeFileSync(dest, output);
   else console.log(output);
 };
