@@ -118,14 +118,22 @@ const main = (dir: string, dest?: string) => {
       return true;
     });
   let output = `type Reference<T, R> = T extends 'get' ? R : string | null;
+interface GetsType<T> {
+  contents: T[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
 type DateType = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
   revisedAt: string;
-};\n
+};
 type Structure<T, P> = T extends 'get'
   ? { id: string } & DateType & Required<P>
+  : T extends 'gets'
+  ? GetsType<{ id: string } & DateType & Required<P>>
   : Partial<DateType> & (T extends 'patch' ? Partial<P> : P);\n\n`;
   typeNames.forEach(async (file, name) => {
     const schema = fs.readFileSync(path.resolve(dir, file));
@@ -134,7 +142,7 @@ type Structure<T, P> = T extends 'get'
   });
   output += `\nexport interface EndPoints {\n`;
 
-  ['get', 'post', 'put', 'patch'].forEach((method) => {
+  ['get', 'gets', 'post', 'put', 'patch'].forEach((method) => {
     output += `  ${method}: {\n`;
     typeNames.forEach((_, name) => {
       output += `    ${name}: ${name}<'${method}'>\n`;

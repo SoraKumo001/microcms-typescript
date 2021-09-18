@@ -1,13 +1,20 @@
 type Reference<T, R> = T extends 'get' ? R : string | null;
+interface GetsType<T> {
+  contents: T[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+}
 type DateType = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
   revisedAt: string;
 };
-
 type Structure<T, P> = T extends 'get'
   ? { id: string } & DateType & Required<P>
+  : T extends 'gets'
+  ? GetsType<{ id: string } & DateType & Required<P>>
   : Partial<DateType> & (T extends 'patch' ? Partial<P> : P);
 
 export type test3<T='get'> = Structure<
@@ -137,6 +144,11 @@ export interface EndPoints {
     test3: test3<'get'>
     test2: test2<'get'>
     contents: contents<'get'>
+  }
+  gets: {
+    test3: test3<'gets'>
+    test2: test2<'gets'>
+    contents: contents<'gets'>
   }
   post: {
     test3: test3<'post'>

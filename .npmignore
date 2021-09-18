@@ -2,6 +2,7 @@
 /src
 /test
 /schema
+/sample
 tsconfig.json
 .eslintrc.json
 .prettierrc
