@@ -14,6 +14,7 @@ interface MicroCMSFieldType {
     | 'custom'
     | 'repeater'
     | 'media'
+    | 'file'
     | 'relation'
     | 'relationList'
     | 'date';
@@ -56,6 +57,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       boolean: () => 'boolean',
       date: () => 'string',
       media: () => '{ url: string, width: number, height: number }',
+      file: () => '{ url: string }',
       custom: () => `${name}_${customs[fields.customFieldCreatedAt!]}`,
       repeater: () => {
         const { customFieldCreatedAtList: list } = fields;
