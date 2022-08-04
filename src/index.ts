@@ -71,19 +71,19 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
     };
     return types[kind]?.() || 'any';
   };
-  const getDoc = (fieald: MicroCMSFieldType) => {
-    return `/**\n * ${fieald.name}\n */`;
+  const getDoc = (field: MicroCMSFieldType) => {
+    return `/**\n * ${field.name}\n */`;
   };
-  const getFiealds = (fiealds: MicroCMSFieldType[]) => {
-    return fiealds.map((fields) => {
+  const getFields = (fields: MicroCMSFieldType[]) => {
+    return fields.map((fields) => {
       const { fieldId, required } = fields;
       return `${getDoc(fields)}\n${fieldId}${!required ? '?' : ''}: ${getKindType(fields)}`;
     });
   };
 
-  const mainSchema = getFiealds(apiFields);
+  const mainSchema = getFields(apiFields);
   const customSchemas = Object.fromEntries(
-    customFields.map(({ fieldId, fields }) => [fieldId, getFiealds(fields)])
+    customFields.map(({ fieldId, fields }) => [fieldId, getFields(fields)])
   );
   return { mainSchema, customSchemas };
 };
