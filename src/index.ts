@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
+import { camelCase } from './utils';
 
 interface MicroCMSFieldType {
   fieldId: string;
@@ -91,7 +92,7 @@ const outSchema = (
   name: string,
   { mainSchema, customSchemas }: ReturnType<typeof convertSchema>
 ) => {
-  let buffer = `export type ${name}<T='get'> = Structure<\nT,\n{\n`;
+  let buffer = `export type ${camelCase(name)}<T='get'> = Structure<\nT,\n{\n`;
 
   mainSchema.forEach((field) => {
     field.split('\n').forEach((s) => (buffer += `  ${s}\n`));
@@ -147,7 +148,7 @@ type Structure<T, P> = T extends 'get'
   ['get', 'gets', 'post', 'put', 'patch'].forEach((method) => {
     output += `  ${method}: {\n`;
     typeNames.forEach((_, name) => {
-      output += `    ${name}: ${name}<'${method}'>\n`;
+      output += `    '${name}': ${camelCase(name)}<'${method}'>\n`;
     });
     output += '  }\n';
   });
