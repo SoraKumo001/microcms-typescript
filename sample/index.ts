@@ -113,6 +113,15 @@ T,
   body?: string
 }>
 
+export type newsCategories<T='get'> = Structure<
+T,
+{
+  /**
+   * 名前
+   */
+  name: string
+}>
+
 export type contents<T='get'> = Structure<
 T,
 {
@@ -141,28 +150,33 @@ T,
 
 export interface EndPoints {
   get: {
-    test3: test3<'get'>
-    test2: test2<'get'>
-    contents: contents<'get'>
+    'test3': test3<'get'>
+    'test2': test2<'get'>
+    'news-categories': newsCategories<'get'>
+    'contents': contents<'get'>
   }
   gets: {
-    test3: test3<'gets'>
-    test2: test2<'gets'>
-    contents: contents<'gets'>
+    'test3': test3<'gets'>
+    'test2': test2<'gets'>
+    'news-categories': newsCategories<'gets'>
+    'contents': contents<'gets'>
   }
   post: {
-    test3: test3<'post'>
-    test2: test2<'post'>
-    contents: contents<'post'>
+    'test3': test3<'post'>
+    'test2': test2<'post'>
+    'news-categories': newsCategories<'post'>
+    'contents': contents<'post'>
   }
   put: {
-    test3: test3<'put'>
-    test2: test2<'put'>
-    contents: contents<'put'>
+    'test3': test3<'put'>
+    'test2': test2<'put'>
+    'news-categories': newsCategories<'put'>
+    'contents': contents<'put'>
   }
   patch: {
-    test3: test3<'patch'>
-    test2: test2<'patch'>
-    contents: contents<'patch'>
+    'test3': test3<'patch'>
+    'test2': test2<'patch'>
+    'news-categories': newsCategories<'patch'>
+    'contents': contents<'patch'>
   }
 }
