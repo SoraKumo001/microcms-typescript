@@ -1,6 +1,6 @@
 {
   "name": "microcms-typescript",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -16,14 +16,14 @@
     "lint:fix": "eslint --fix src/ && prettier -w src"
   },
   "devDependencies": {
-    "@types/node": "^18.6.4",
-    "@typescript-eslint/eslint-plugin": "^5.32.0",
-    "@typescript-eslint/parser": "^5.32.0",
-    "eslint": "^8.21.0",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.4"
   },
   "repository": "https://github.com/SoraKumo001/microcms-typescript",
   "author": "SoraKumo <info@croud.jp>"

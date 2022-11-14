@@ -75,6 +75,7 @@ T,
 }>
 
 interface test3_custom2 {
+  fieldId: 'custom2'
   /**
    * aa
    */
@@ -85,6 +86,7 @@ interface test3_custom2 {
   bb?: string
 }
 interface test3_custom3 {
+  fieldId: 'custom3'
   /**
    * aa
    */
@@ -95,6 +97,7 @@ interface test3_custom3 {
   bb?: test3_custom4[]
 }
 interface test3_custom4 {
+  fieldId: 'custom4'
   /**
    * aa
    */
@@ -122,6 +125,67 @@ T,
   name: string
 }>
 
+export type news<T='get'> = Structure<
+T,
+{
+  /**
+   * カテゴリー
+   */
+  category: Reference<T,unknown>
+  /**
+   * タイトル
+   */
+  title: string
+  /**
+   * 内容
+   */
+  contents?: (news_richEditor | news_html | news_markdown | news_image)[]
+  /**
+   * カバー画像
+   */
+  coverImage?: { url: string, width: number, height: number }
+  /**
+   * 関連お知らせ
+   */
+  relatedNews?: Reference<T,unknown>[]
+}>
+
+interface news_richEditor {
+  fieldId: 'richEditor'
+  /**
+   * リッチエディタ
+   */
+  content: string
+}
+interface news_html {
+  fieldId: 'html'
+  /**
+   * HTML
+   */
+  content: string
+}
+interface news_markdown {
+  fieldId: 'markdown'
+  /**
+   * Markdown
+   */
+  content: string
+}
+interface news_image {
+  fieldId: 'image'
+  /**
+   * 代替えテキスト
+   */
+  alt?: string
+  /**
+   * 画像
+   */
+  image: { url: string, width: number, height: number }
+  /**
+   * 配置
+   */
+  position: ['左寄せ' | '中央寄せ' | '右寄せ']
+}
 export type contents<T='get'> = Structure<
 T,
 {
@@ -153,30 +217,35 @@ export interface EndPoints {
     'test3': test3<'get'>
     'test2': test2<'get'>
     'news-categories': newsCategories<'get'>
+    'news': news<'get'>
     'contents': contents<'get'>
   }
   gets: {
     'test3': test3<'gets'>
     'test2': test2<'gets'>
     'news-categories': newsCategories<'gets'>
+    'news': news<'gets'>
     'contents': contents<'gets'>
   }
   post: {
     'test3': test3<'post'>
     'test2': test2<'post'>
     'news-categories': newsCategories<'post'>
+    'news': news<'post'>
     'contents': contents<'post'>
   }
   put: {
     'test3': test3<'put'>
     'test2': test2<'put'>
     'news-categories': newsCategories<'put'>
+    'news': news<'put'>
     'contents': contents<'put'>
   }
   patch: {
     'test3': test3<'patch'>
     'test2': test2<'patch'>
     'news-categories': newsCategories<'patch'>
+    'news': news<'patch'>
     'contents': contents<'patch'>
   }
 }
