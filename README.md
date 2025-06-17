@@ -1,5 +1,10 @@
 # microcms-typescript
 
+[![](https://img.shields.io/npm/l/microcms-typescript)](https://www.npmjs.com/package/microcms-typescript)
+[![](https://img.shields.io/npm/v/microcms-typescript)](https://www.npmjs.com/package/microcms-typescript)
+[![](https://img.shields.io/npm/dw/microcms-typescript)](https://www.npmjs.com/package/microcms-typescript)
+[![](https://deepwiki.com/badge.svg)](https://deepwiki.com/SoraKumo001/microcms-typescript)
+
 ## description
 
 Convert [MicroCMS](https://microcms.io/) schema to TypeScript type definitions.
@@ -38,7 +43,7 @@ api-contents-20210905132840.json -> cms-types.ts
 ```ts
 import type { EndPoints } from './cms-types';
 
-let a:EndPoints["gets"]["contents"];
+let a: EndPoints['gets']['contents'];
 /*
 {
     limit:number
@@ -59,7 +64,7 @@ let a:EndPoints["gets"]["contents"];
 }
 */
 
-let b:EndPoints["get"]["contents"];
+let b: EndPoints['get']['contents'];
 /*
 {
     id: string;
@@ -75,8 +80,8 @@ let b:EndPoints["get"]["contents"];
 }
 */
 
-let c:EndPoints["post"]["contents"];
-let d:EndPoints["put"]["contents"];
+let c: EndPoints['post']['contents'];
+let d: EndPoints['put']['contents'];
 /*
 {
     title: string;
@@ -91,7 +96,7 @@ let d:EndPoints["put"]["contents"];
 }
 */
 
-let e:EndPoints["patch"]["contents"];
+let e: EndPoints['patch']['contents'];
 /*
 {
     title?: string;
