@@ -15,6 +15,7 @@ interface MicroCMSFieldType {
     | 'custom'
     | 'repeater'
     | 'media'
+    | 'mediaList'
     | 'file'
     | 'relation'
     | 'relationList'
@@ -57,7 +58,8 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       relationList: () => 'Reference<T,unknown>[]',
       boolean: () => 'boolean',
       date: () => 'string',
-      media: () => '{ url: string, width: number, height: number }',
+      media: () => 'MediaType',
+      mediaList: () => 'MediaType[]',
       file: () => '{ url: string }',
       custom: () => `${name}_${customs[fields.customFieldCreatedAt!]}`,
       repeater: () => {
@@ -136,6 +138,11 @@ type DateType = {
   publishedAt: string;
   revisedAt: string;
 };
+type MediaType = {
+  url: string;
+  width: number;
+  height: number;
+}
 type Structure<T, P> = T extends 'get'
   ? { id: string } & DateType & Required<P>
   : T extends 'gets'
