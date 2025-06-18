@@ -11,6 +11,7 @@ interface MicroCMSFieldType {
     | 'textArea'
     | 'number'
     | 'richEditor'
+    | 'richEditorV2'
     | 'select'
     | 'custom'
     | 'repeater'
@@ -47,6 +48,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       text: () => 'string',
       textArea: () => 'string',
       richEditor: () => 'string',
+      richEditorV2: ()=> 'string',
       number: () => 'number',
       select: () => {
         const { selectItems: list, multipleSelect } = fields;
