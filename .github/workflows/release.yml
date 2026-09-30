@@ -4,83 +4,96 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "package.json"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  id-token: write
+concurrency:
+  group: release-microcms-typescript
+  cancel-in-progress: false
 
 jobs:
-  release:
+  check-version:
     runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      version: ${{ steps.check.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
     steps:
-      - name: Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check package version and git tag
+        id: check
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "Package version: $VERSION"
+          echo "Target tag: $TAG"
+
+          EXISTS=$(git ls-remote --tags origin "refs/tags/$TAG")
+          if [ -n "$EXISTS" ]; then
+            echo "Tag $TAG already exists on remote. Skipping release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag $TAG does not exist on remote. Proceeding with release."
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 11
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Check version
-        id: check-version
-        run: |
-          PKG_NAME=$(node -p "require('./package.json').name")
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          TAG="v$PKG_VERSION"
-
-          git fetch --tags origin || true
-
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists. Skipping release."
-            echo "release=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          NPM_EXISTS=$(npm view "$PKG_NAME@$PKG_VERSION" version 2>/dev/null || true)
-          if [ "$NPM_EXISTS" = "$PKG_VERSION" ]; then
-            echo "Version $PKG_VERSION is already published on npm. Skipping release."
-            echo "release=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "New version $PKG_VERSION detected. Preparing release."
-          echo "release=true" >> "$GITHUB_OUTPUT"
-          echo "version=$PKG_VERSION" >> "$GITHUB_OUTPUT"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
 
       - name: Install dependencies
-        if: steps.check-version.outputs.release == 'true'
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        if: steps.check-version.outputs.release == 'true'
         run: pnpm run build
 
-      - name: Create Git Tag and GitHub Release
-        if: steps.check-version.outputs.release == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push git tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "${{ steps.check-version.outputs.tag }}"
-          git push origin "${{ steps.check-version.outputs.tag }}"
-          gh release create "${{ steps.check-version.outputs.tag }}" \
-            --title "${{ steps.check-version.outputs.tag }}" \
+          git tag "${{ needs.check-version.outputs.tag }}"
+          git push origin "${{ needs.check-version.outputs.tag }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ needs.check-version.outputs.tag }}" \
+            --title "${{ needs.check-version.outputs.tag }}" \
             --generate-notes
 
-      - name: Publish to npm
-        if: steps.check-version.outputs.release == 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
+      - name: Publish to npm (Trusted Publishing / OIDC)
+        run: |
+          npm install -g npm@latest
+          pnpm publish --provenance --access public --no-git-checks

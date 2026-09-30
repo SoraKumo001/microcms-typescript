@@ -1,6 +1,6 @@
 {
   "name": "microcms-typescript",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
@@ -29,6 +29,9 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.0"
   },
-  "repository": "https://github.com/SoraKumo001/microcms-typescript",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoraKumo001/microcms-typescript.git"
+  },
   "author": "SoraKumo <info@croud.jp>"
 }
