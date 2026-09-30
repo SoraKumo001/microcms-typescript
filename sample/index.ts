@@ -11,6 +11,12 @@ type DateType = {
   publishedAt: string;
   revisedAt: string;
 };
+type MediaType = {
+  url: string;
+  width: number;
+  height: number;
+  alt?: string;
+}
 type Structure<T, P> = T extends 'get'
   ? { id: string } & DateType & Required<P>
   : T extends 'gets'
@@ -55,7 +61,7 @@ T,
   /**
    * gg
    */
-  gg?: { url: string, width: number, height: number }
+  gg?: MediaType
   /**
    * 参照
    */
@@ -90,7 +96,7 @@ interface test3_custom3 {
   /**
    * aa
    */
-  aa?: { url: string, width: number, height: number }
+  aa?: MediaType
   /**
    * bb
    */
@@ -143,7 +149,7 @@ T,
   /**
    * カバー画像
    */
-  coverImage?: { url: string, width: number, height: number }
+  coverImage?: MediaType
   /**
    * 関連お知らせ
    */
@@ -180,7 +186,7 @@ interface news_image {
   /**
    * 画像
    */
-  image: { url: string, width: number, height: number }
+  image: MediaType
   /**
    * 配置
    */
