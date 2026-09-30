@@ -3,12 +3,19 @@
 [![npm version](https://img.shields.io/npm/v/microcms-typescript.svg)](https://www.npmjs.com/package/microcms-typescript)
 [![npm license](https://img.shields.io/npm/l/microcms-typescript.svg)](https://www.npmjs.com/package/microcms-typescript)
 [![npm downloads](https://img.shields.io/npm/dw/microcms-typescript.svg)](https://www.npmjs.com/package/microcms-typescript)
+[![Test](https://github.com/SoraKumo001/microcms-typescript/actions/workflows/test.yml/badge.svg)](https://github.com/SoraKumo001/microcms-typescript/actions/workflows/test.yml)
 [![Release](https://github.com/SoraKumo001/microcms-typescript/actions/workflows/release.yml/badge.svg)](https://github.com/SoraKumo001/microcms-typescript/actions/workflows/release.yml)
 
-Convert [microCMS](https://microcms.io/) schema JSON files to TypeScript type definitions.
+Convert [microCMS](https://microcms.io/) schema JSON files or remote APIs to TypeScript type definitions.
 
-- ⚡️ **Zero Config**: Automatically derives endpoint names from schema filenames.
-- 📦 **Rich Field Support**: Relations, Repeaters, Custom Fields, Media/MediaList, Rich Editor (v1/v2), etc.
+- ⚡️ **Zero Config & Remote Sync**: Fetch directly from microCMS Management API or local JSON files.
+- 📁 **Directory or Single File**: Specify either a directory containing schemas or a single JSON file.
+- 📦 **Rich Field Support**: Relations, Repeaters, Custom Fields, Media/MediaList, Extension Fields (`iframe`), Rich Editor (v1/v2), etc.
+- 🔗 **Generic Relation Typing**: Type-safe relational fields without arbitrary type assertions.
+- 📑 **List & Object API Support**: Automatically recognizes Single Content (Object) vs List API types.
+- 🏷 **Type-safe JSDoc**: Rich doc comments with `@required` and `@values` annotations.
+- 🔠 **Naming Conventions**: Supports both `camelCase` (default) and `PascalCase` (`--pascal-case`).
+- ⚙️ **Config File Support**: Convenient `microcms-typescript.config.json` configuration.
 - 🔄 **CRUD Type Generation**: Generates dedicated type definitions for `get`, `gets`, `post`, `put`, and `patch`.
 - 🛠 **microcms-js-sdk Friendly**: Designed to work seamlessly with the official SDK.
 
@@ -16,89 +23,103 @@ Convert [microCMS](https://microcms.io/) schema JSON files to TypeScript type de
 
 ## Installation & Quick Start
 
-### Using `npx` (No install required)
+### 1. Remote Mode (Fetch from microCMS Management API)
+
+No need to manually export JSON files. Synchronize types directly from your microCMS service:
 
 ```bash
-npx microcms-typescript <schemas-dir> [output-file]
+# Using CLI options
+npx microcms-typescript --service-domain YOUR_SERVICE_DOMAIN --api-key YOUR_MANAGEMENT_API_KEY ./types/microcms.ts
 
-# Example:
+# Or with environment variables (MICROCMS_SERVICE_DOMAIN and MICROCMS_API_KEY)
+npx microcms-typescript -o ./types/microcms.ts --pascal-case
+```
+
+### 2. Local File / Directory Mode
+
+```bash
+# Directory input (outputs to file)
 npx microcms-typescript ./schemas ./types/microcms.ts
+
+# Single file input
+npx microcms-typescript ./schemas/api-news-20240101.json ./types/news.ts
+
+# Generate with PascalCase type names (e.g., NewsCategories)
+npx microcms-typescript ./schemas ./types/microcms.ts --pascal-case
 ```
 
-If `output-file` is omitted, the generated TypeScript code will be printed to stdout.
+If the output path is omitted, the generated TypeScript code is printed to `stdout`.
 
-### Installing in your project
+### 3. Using a Configuration File
 
-```bash
-# npm
-npm install -D microcms-typescript
-
-# pnpm
-pnpm add -D microcms-typescript
-
-# yarn
-yarn add -D microcms-typescript
-```
-
-Add a script to your `package.json`:
+Create a `microcms-typescript.config.json` in your project root:
 
 ```json
 {
-  "scripts": {
-    "gen:types": "microcms-typescript schemas types/microcms.ts"
-  }
+  "serviceDomain": "your-service-domain",
+  "apiKey": "your-management-api-key",
+  "output": "./src/types/microcms.ts",
+  "pascalCase": true
 }
+```
+
+Then simply run:
+
+```bash
+npx microcms-typescript
 ```
 
 ---
 
-## How It Works
+## CLI Options
 
-### 1. Export schema files from microCMS
-
-In the microCMS management console:
-
-1. Navigate to **API Settings** > **Schema**.
-2. Click **Export** to download the schema JSON file.
-3. Save the downloaded files into your schema directory (e.g., `./schemas/`).
-
-### 2. File Naming Convention
-
-microCMS exports schema files in the following format:
-
-```text
-api-<endpointName>-<timestamp>.json
-```
-
-For example:
-
-- `api-news-20240101120000.json` → Endpoint name: `news`
-- `api-news_categories-20240101120500.json` → Endpoint name: `news_categories` (converted to camelCase `newsCategories` for type names)
-
-> [!NOTE]
-> If multiple schema files exist for the same endpoint, `microcms-typescript` will automatically use the file with the **latest date/timestamp**.
+| Option / Flag               | Alias | Description                                                   |
+| --------------------------- | ----- | ------------------------------------------------------------- |
+| `<src-dir-or-file>`         |       | Input directory or schema JSON file path                      |
+| `[dist-file]`               | `-o`  | Output TypeScript file destination                            |
+| `--service-domain <domain>` | `-s`  | microCMS service domain for Management API                    |
+| `--api-key <key>`           | `-k`  | microCMS Management API key                                   |
+| `--pascal-case`             |       | Generate PascalCase type names instead of camelCase           |
+| `--config <path>`           | `-c`  | Path to custom configuration JSON file                        |
 
 ---
 
 ## Supported Fields & Type Mapping
 
-| Field Name        | Type Name                    | TypeScript Output                   | Notes                                                          |
-| ----------------- | ---------------------------- | ----------------------------------- | -------------------------------------------------------------- |
-| Text              | `text`                       | `string`                            | Optional (`?`) if not required                                 |
-| Text Area         | `textArea`                   | `string`                            |                                                                |
-| Rich Editor       | `richEditor`, `richEditorV2` | `string`                            | Returns HTML string                                            |
-| Number            | `number`                     | `number`                            |                                                                |
-| Select (Single)   | `select`                     | `['value1' \| 'value2']`            | Tuple of union                                                 |
-| Select (Multiple) | `select`                     | `('value1' \| 'value2')[]`          | Array of union                                                 |
-| Boolean           | `boolean`                    | `boolean`                           |                                                                |
-| Date              | `date`                       | `string`                            | ISO 8601 string                                                |
-| Media             | `media`                      | `MediaType`                         | `{ url: string; width: number; height: number; alt?: string }` |
-| Media List        | `mediaList`                  | `MediaType[]`                       | Array of `MediaType`                                           |
-| File              | `file`                       | `{ url: string; fileSize: number }` |                                                                |
-| Relation          | `relation`                   | `Reference<T, unknown>`             | Resolves based on operation (`get` vs `post`)                  |
-| Relation List     | `relationList`               | `Reference<T, unknown>[]`           | Array of references                                            |
-| Custom Field      | `custom`                     | `<Endpoint>_<CustomFieldId>`        | Generated dedicated interface                                  |
-| Repeater          | `repeater`                   | `(<Custom1> \| <Custom2>)[]`        | Union array of custom fields                                   |
+| Field Name        | Type Name                    | TypeScript Output                    | Notes                                                           |
+| ----------------- | ---------------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| Text              | `text`                       | `string`                             | Optional (`?`) if not required                                  |
+| Text Area         | `textArea`                   | `string`                             |                                                                 |
+| Rich Editor       | `richEditor`, `richEditorV2` | `string`                             | Returns HTML string                                             |
+| Number            | `number`                     | `number`                             |                                                                 |
+| Select (Single)   | `select`                     | `['value1' \| 'value2']`             | Tuple of union (`@values` added to JSDoc)                       |
+| Select (Multiple) | `select`                     | `('value1' \| 'value2')[]`           | Array of union (`@values` added to JSDoc)                       |
+| Boolean           | `boolean`                    | `boolean`                            |                                                                 |
+| Date              | `date`                       | `string`                             | ISO 8601 string                                                 |
+| Media             | `media`                      | `MediaType`                          | `{ url: string; width?: number; height?: number; alt?: string }`|
+| Media List        | `mediaList`                  | `MediaType[]`                        | Array of `MediaType`                                            |
+| File              | `file`                       | `{ url: string; fileSize: number }`  |                                                                 |
+| Extension Field   | `iframe`                     | `any`                                | Custom extension iframe field                                   |
+| Relation          | `relation`                   | `Reference<T, R['field']>`           | Generic typed reference (`unknown` by default)                 |
+| Relation List     | `relationList`               | `Reference<T, R['field']>[]`         | Array of generic references                                     |
+| Custom Field      | `custom`                     | `<Endpoint>_<CustomFieldId>`         | Generated exported interface                                    |
+| Repeater          | `repeater`                   | `(<Custom1> \| <Custom2>)[]`         | Union array of custom fields                                    |
+
+---
+
+## Relation Type Generics
+
+By default, relational fields resolve to `unknown`. You can override the referenced types with the `R` generic parameter:
+
+```typescript
+import type { News, NewsCategories } from './types/microcms';
+
+// Specify the related category type
+type Article = News<'get', { category: NewsCategories<'get'> }>;
+
+// article.category is fully typed as NewsCategories<'get'>
+const categoryName = article.category.name;
+```
 
 ---
 
@@ -145,13 +166,15 @@ The generated output includes:
 1. **Common Utility Types**:
    - `Reference<T, R>`: Automatically handles reference types (`R` on `get`, `string | null` on mutation).
    - `GetsType<T>`: Standard list response wrapper (`contents`, `totalCount`, `offset`, `limit`).
-   - `MediaType`: Media asset details.
-   - `Structure<T, P>`: Automatically attaches metadata fields (`id`, `createdAt`, `updatedAt`, `publishedAt`, `revisedAt`) based on the operation mode.
+   - `DateType`: Metadata date fields (`createdAt`, `updatedAt`, `publishedAt: string | null`, `revisedAt: string | null`).
+   - `MediaType`: Media asset details with optional width/height.
+   - `Structure<T, P>`: Combines system fields (`id`, `DateType`) and your schema payload.
+   - `StructureObject<T, P>`: Metadata for Object (single content) API without `id` field.
 2. **Endpoint Types**:
-   - `<EndpointName><T='get'>`: Generic type parameterized by operation mode (`'get' | 'gets' | 'post' | 'put' | 'patch'`).
+   - `<EndpointName><T='get', R=...>`: Generic type parameterized by operation mode and relation mappings.
 3. **EndPoints Interface**:
    - `EndPoints['get']`: Detailed single content type.
-   - `EndPoints['gets']`: Wrapped list type with `contents`, `totalCount`, etc.
+   - `EndPoints['gets']`: Wrapped list type (automatically omitted for Object API endpoints).
    - `EndPoints['post']` / `EndPoints['put']`: Content creation / replacement payload type.
    - `EndPoints['patch']`: Partial payload type for partial updates.
 

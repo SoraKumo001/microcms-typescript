@@ -8,26 +8,31 @@ interface GetsType<T> {
 type DateType = {
   createdAt: string;
   updatedAt: string;
-  publishedAt: string;
-  revisedAt: string;
+  publishedAt: string | null;
+  revisedAt: string | null;
 };
 type MediaType = {
   url: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   alt?: string;
 }
 type Structure<T, P> = T extends 'get'
-  ? { id: string } & DateType & Required<P>
+  ? { id: string } & DateType & P
   : T extends 'gets'
-  ? GetsType<{ id: string } & DateType & Required<P>>
+  ? GetsType<{ id: string } & DateType & P>
   : Partial<DateType> & (T extends 'patch' ? Partial<P> : P);
 
-export type test3<T='get'> = Structure<
+type StructureObject<T, P> = T extends 'get'
+  ? DateType & P
+  : Partial<DateType> & (T extends 'patch' ? Partial<P> : P);
+
+export type test3<T='get', R extends Record<string, unknown> = Record<string, unknown>> = Structure<
 T,
 {
   /**
    * テキストフィールド
+   * @required
    */
   title: string
   /**
@@ -36,10 +41,12 @@ T,
   value?: number
   /**
    * セレクト(単数)
+   * @values a, b, c
    */
   keyword2?: ['a' | 'b' | 'c']
   /**
    * セレクト(複数)
+   * @values aaa, bbb, ccc
    */
   keyword?: ('aaa' | 'bbb' | 'ccc')[]
   /**
@@ -65,22 +72,23 @@ T,
   /**
    * 参照
    */
-  reference?: Reference<T,unknown | null>
+  reference?: Reference<T, ('reference' extends keyof R ? R['reference'] : unknown) | null>
   /**
    * 参照(複数)
    */
-  reference2?: Reference<T,unknown>[]
+  reference2?: Reference<T, 'reference2' extends keyof R ? R['reference2'] : unknown>[]
   /**
    * 日付
    */
   date?: string
   /**
    * 日付(必須)
+   * @required
    */
   date2: string
 }>
 
-interface test3_custom2 {
+export interface test3_custom2 {
   fieldId: 'custom2'
   /**
    * aa
@@ -91,7 +99,7 @@ interface test3_custom2 {
    */
   bb?: string
 }
-interface test3_custom3 {
+export interface test3_custom3 {
   fieldId: 'custom3'
   /**
    * aa
@@ -102,14 +110,14 @@ interface test3_custom3 {
    */
   bb?: test3_custom4[]
 }
-interface test3_custom4 {
+export interface test3_custom4 {
   fieldId: 'custom4'
   /**
    * aa
    */
   aa?: test3_custom3[]
 }
-export type test2<T='get'> = Structure<
+export type test2<T='get', R extends Record<string, unknown> = Record<string, unknown>> = Structure<
 T,
 {
   /**
@@ -122,24 +130,27 @@ T,
   body?: string
 }>
 
-export type newsCategories<T='get'> = Structure<
+export type newsCategories<T='get', R extends Record<string, unknown> = Record<string, unknown>> = Structure<
 T,
 {
   /**
    * 名前
+   * @required
    */
   name: string
 }>
 
-export type news<T='get'> = Structure<
+export type news<T='get', R extends Record<string, unknown> = Record<string, unknown>> = Structure<
 T,
 {
   /**
    * カテゴリー
+   * @required
    */
-  category: Reference<T,unknown>
+  category: Reference<T, 'category' extends keyof R ? R['category'] : unknown>
   /**
    * タイトル
+   * @required
    */
   title: string
   /**
@@ -153,31 +164,34 @@ T,
   /**
    * 関連お知らせ
    */
-  relatedNews?: Reference<T,unknown>[]
+  relatedNews?: Reference<T, 'relatedNews' extends keyof R ? R['relatedNews'] : unknown>[]
 }>
 
-interface news_richEditor {
+export interface news_richEditor {
   fieldId: 'richEditor'
   /**
    * リッチエディタ
+   * @required
    */
   content: string
 }
-interface news_html {
+export interface news_html {
   fieldId: 'html'
   /**
    * HTML
+   * @required
    */
   content: string
 }
-interface news_markdown {
+export interface news_markdown {
   fieldId: 'markdown'
   /**
    * Markdown
+   * @required
    */
   content: string
 }
-interface news_image {
+export interface news_image {
   fieldId: 'image'
   /**
    * 代替えテキスト
@@ -185,22 +199,27 @@ interface news_image {
   alt?: string
   /**
    * 画像
+   * @required
    */
   image: MediaType
   /**
    * 配置
+   * @required
+   * @values 左寄せ, 中央寄せ, 右寄せ
    */
   position: ['左寄せ' | '中央寄せ' | '右寄せ']
 }
-export type contents<T='get'> = Structure<
+export type contents<T='get', R extends Record<string, unknown> = Record<string, unknown>> = Structure<
 T,
 {
   /**
    * タイトル
+   * @required
    */
   title: string
   /**
    * 表示
+   * @required
    */
   visible: boolean
   /**
@@ -210,7 +229,7 @@ T,
   /**
    * 親記事
    */
-  parent?: Reference<T,unknown | null>
+  parent?: Reference<T, ('parent' extends keyof R ? R['parent'] : unknown) | null>
   /**
    * 本文
    */

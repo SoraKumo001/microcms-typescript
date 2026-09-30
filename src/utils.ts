@@ -9,3 +9,13 @@ export const camelCase = (str: string): string => {
     return group1.toUpperCase();
   });
 };
+
+/**
+ * convert to PascalCase
+ * @param {string} str
+ * @return {string} SampleString
+ */
+export const pascalCase = (str: string): string => {
+  const camel = camelCase(str);
+  return camel.charAt(0).toUpperCase() + camel.slice(1);
+};
