@@ -1,0 +1,190 @@
+{
+  "apiFields": [
+    {
+      "idValue": "VKz2DRAfju",
+      "fieldId": "category",
+      "name": "カテゴリー",
+      "kind": "relation",
+      "required": true,
+      "referenceDisplayItem": "1VeK3PU3N_"
+    },
+    {
+      "fieldId": "title",
+      "name": "タイトル",
+      "kind": "text",
+      "required": true,
+      "isUnique": false
+    },
+    {
+      "fieldId": "contents",
+      "name": "内容",
+      "kind": "repeater",
+      "required": false,
+      "customFieldCreatedAtList": [
+        "2022-08-04T10:38:53.943Z",
+        "2022-08-04T10:39:29.580Z",
+        "2022-08-04T10:39:58.343Z",
+        "2022-08-04T10:42:16.565Z"
+      ]
+    },
+    {
+      "fieldId": "coverImage",
+      "name": "カバー画像",
+      "kind": "media"
+    },
+    {
+      "fieldId": "relatedNews",
+      "name": "関連お知らせ",
+      "kind": "relationList",
+      "relationListCountLimitValidation": {
+        "relationListCount": {
+          "min": null,
+          "max": 4
+        }
+      }
+    }
+  ],
+  "customFields": [
+    {
+      "createdAt": "2022-08-04T10:38:53.943Z",
+      "fieldId": "richEditor",
+      "name": "リッチエディタ",
+      "fields": [
+        {
+          "idValue": "QwamnszSrV",
+          "fieldId": "content",
+          "name": "リッチエディタ",
+          "kind": "richEditor",
+          "required": true,
+          "richEditorOptions": [
+            "headerOne",
+            "headerTwo",
+            "headerThree",
+            "headerFour",
+            "headerFive",
+            "paragraph",
+            "bold",
+            "italic",
+            "underline",
+            "strike",
+            "code",
+            "align",
+            "blockquote",
+            "codeBlock",
+            "listOrdered",
+            "listBullet",
+            "scriptSub",
+            "scriptSuper",
+            "link",
+            "clean",
+            "background",
+            "color"
+          ]
+        }
+      ],
+      "position": [
+        [
+          "QwamnszSrV"
+        ]
+      ],
+      "updatedAt": "2022-08-04T10:38:53.943Z",
+      "viewerGroup": "sHm"
+    },
+    {
+      "createdAt": "2022-08-04T10:39:29.580Z",
+      "fieldId": "html",
+      "name": "HTML",
+      "fields": [
+        {
+          "idValue": "c7v6zV4889",
+          "fieldId": "content",
+          "name": "HTML",
+          "kind": "textArea",
+          "required": true
+        }
+      ],
+      "position": [
+        [
+          "c7v6zV4889"
+        ]
+      ],
+      "updatedAt": "2022-08-04T10:39:29.580Z",
+      "viewerGroup": "sHm"
+    },
+    {
+      "createdAt": "2022-08-04T10:39:58.343Z",
+      "fieldId": "markdown",
+      "name": "Markdown",
+      "fields": [
+        {
+          "idValue": "btwzYdGABV",
+          "fieldId": "content",
+          "name": "Markdown",
+          "kind": "textArea",
+          "required": true
+        }
+      ],
+      "position": [
+        [
+          "btwzYdGABV"
+        ]
+      ],
+      "updatedAt": "2022-08-04T10:39:58.343Z",
+      "viewerGroup": "sHm"
+    },
+    {
+      "createdAt": "2022-08-04T10:42:16.565Z",
+      "fieldId": "image",
+      "name": "画像",
+      "fields": [
+        {
+          "idValue": "4I7jyhflyT",
+          "fieldId": "alt",
+          "name": "代替えテキスト",
+          "kind": "text",
+          "required": false
+        },
+        {
+          "idValue": "lOJ2zuaOTA",
+          "fieldId": "image",
+          "name": "画像",
+          "kind": "media",
+          "required": true
+        },
+        {
+          "idValue": "YC8kzTVSbG",
+          "fieldId": "position",
+          "name": "配置",
+          "kind": "select",
+          "required": true,
+          "selectItems": [
+            {
+              "id": "oQQfRu9-n_",
+              "value": "左寄せ"
+            },
+            {
+              "id": "40o7UswJdO",
+              "value": "中央寄せ"
+            },
+            {
+              "id": "2ZqkHNAk3P",
+              "value": "右寄せ"
+            }
+          ],
+          "multipleSelect": false
+        }
+      ],
+      "position": [
+        [
+          "lOJ2zuaOTA",
+          "YC8kzTVSbG"
+        ],
+        [
+          "4I7jyhflyT"
+        ]
+      ],
+      "updatedAt": "2022-08-04T10:42:25.871Z",
+      "viewerGroup": "sHm"
+    }
+  ]
+}

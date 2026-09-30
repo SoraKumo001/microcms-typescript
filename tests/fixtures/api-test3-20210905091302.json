@@ -1,0 +1,108 @@
+{
+  "apiFields": [
+    {
+      "idValue": "F-fOQ9g_QU",
+      "fieldId": "title",
+      "name": "テキストフィールド",
+      "kind": "text",
+      "required": true,
+      "isUnique": false
+    },
+    { "fieldId": "value", "name": "数値", "kind": "number", "required": false },
+    {
+      "fieldId": "keyword2",
+      "name": "セレクト(単数)",
+      "kind": "select",
+      "selectItems": [
+        { "id": "1hlII2DxZF", "value": "a" },
+        { "id": "5eBpi_RySd", "value": "b" },
+        { "id": "2JYZFfEq1r", "value": "c" }
+      ],
+      "multipleSelect": false
+    },
+    {
+      "fieldId": "keyword",
+      "name": "セレクト(複数)",
+      "kind": "select",
+      "selectItems": [
+        { "id": "vbfwzWdwlb", "value": "aaa" },
+        { "id": "hN2JRjaCNk", "value": "bbb" },
+        { "id": "8Zr88gO7Wk", "value": "ccc" }
+      ],
+      "multipleSelect": true
+    },
+    { "fieldId": "content", "name": "リッチエディタ", "kind": "richEditor" },
+    { "fieldId": "visible", "name": "真偽値", "kind": "boolean" },
+    {
+      "fieldId": "cc",
+      "name": "カスタム",
+      "kind": "custom",
+      "customFieldCreatedAt": "2021-09-04T07:57:25.988Z"
+    },
+    {
+      "fieldId": "dd",
+      "name": "dd",
+      "kind": "repeater",
+      "customFieldCreatedAtList": ["2021-09-04T07:57:25.988Z", "2021-09-04T08:30:31.290Z"],
+      "repeaterCountLimitValidation": { "repeatCount": { "min": 1, "max": 3 } }
+    },
+    { "fieldId": "gg", "name": "gg", "kind": "media" },
+    {
+      "fieldId": "reference",
+      "name": "参照",
+      "kind": "relation",
+      "selectItems": [],
+      "multipleSelect": false
+    },
+    { "fieldId": "reference2", "name": "参照(複数)", "kind": "relationList" }
+  ],
+  "customFields": [
+    {
+      "createdAt": "2021-09-04T07:57:25.988Z",
+      "fieldId": "custom2",
+      "name": "カスタム",
+      "fields": [
+        { "idValue": "iIMXGWOtS_", "fieldId": "aa", "name": "aa", "kind": "text" },
+        { "idValue": "K_mWFdA279", "fieldId": "bb", "name": "bb", "kind": "date" }
+      ],
+      "position": [["iIMXGWOtS_", "K_mWFdA279"]],
+      "updatedAt": "2021-09-04T08:28:59.423Z",
+      "viewerGroup": "xZk"
+    },
+    {
+      "createdAt": "2021-09-04T08:30:31.290Z",
+      "fieldId": "custom3",
+      "name": "カスタム3",
+      "fields": [
+        { "idValue": "U618rRI8B_", "fieldId": "aa", "name": "aa", "kind": "media" },
+        {
+          "idValue": "fOiKukVotQ",
+          "fieldId": "bb",
+          "name": "bb",
+          "kind": "repeater",
+          "customFieldCreatedAtList": ["2021-09-04T08:36:12.112Z"]
+        }
+      ],
+      "position": [["U618rRI8B_", "fOiKukVotQ"]],
+      "updatedAt": "2021-09-04T08:36:55.145Z",
+      "viewerGroup": "xZk"
+    },
+    {
+      "createdAt": "2021-09-04T08:36:12.112Z",
+      "fieldId": "custom4",
+      "name": "カスタム4",
+      "fields": [
+        {
+          "idValue": "GtR43NpasM",
+          "fieldId": "aa",
+          "name": "aa",
+          "kind": "repeater",
+          "customFieldCreatedAtList": ["2021-09-04T08:30:31.290Z"]
+        }
+      ],
+      "position": [["GtR43NpasM"]],
+      "updatedAt": "2021-09-04T08:36:12.112Z",
+      "viewerGroup": "xZk"
+    }
+  ]
+}

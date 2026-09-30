@@ -207,7 +207,7 @@ describe('convertSchema', () => {
 
 describe('generateFromDir and generateFromPath', () => {
   it('generates valid TypeScript output from the actual schema directory', () => {
-    const schemaDir = path.resolve(__dirname, '../schema');
+    const schemaDir = path.resolve(__dirname, './fixtures');
     const result = generateFromDir(schemaDir);
 
     expect(result).toContain('type Reference<T, R>');
@@ -220,7 +220,7 @@ describe('generateFromDir and generateFromPath', () => {
   });
 
   it('supports pascalCase option when generating from directory', () => {
-    const schemaDir = path.resolve(__dirname, '../schema');
+    const schemaDir = path.resolve(__dirname, './fixtures');
     const result = generateFromDir(schemaDir, { pascalCase: true });
 
     expect(result).toContain("export type Test3<T='get'");
@@ -229,7 +229,7 @@ describe('generateFromDir and generateFromPath', () => {
   });
 
   it('supports generating from a single schema file', () => {
-    const singleFile = path.resolve(__dirname, '../schema/api-news-20220804195333.json');
+    const singleFile = path.resolve(__dirname, './fixtures/api-news-20220804195333.json');
     const result = generateFromPath(singleFile);
 
     expect(result).toContain("export type news<T='get', R extends Record<string, unknown> = Record<string, unknown>>");
