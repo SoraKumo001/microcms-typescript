@@ -25,12 +25,13 @@ interface MicroCMSFieldType {
   multipleSelect?: boolean;
   customFieldCreatedAt?: string;
   customFieldCreatedAtList?: string[];
+  customFieldIds?: string[];
 }
 
 interface MicroCMSSchemaType {
   apiFields: MicroCMSFieldType[];
   customFields: {
-    createdAt: string;
+    createdAt?: string;
     fieldId: string;
     fields: MicroCMSFieldType[];
   }[];
@@ -63,12 +64,11 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       file: () => '{ url: string }',
       custom: () => `${name}_${customs[fields.customFieldCreatedAt!]}`,
       repeater: () => {
-        const { customFieldCreatedAtList: list } = fields;
-        const str = list!.reduce(
-          (a, rep, index) => `${a}${index ? ' | ' : ''}${name}_${customs[rep]}`,
-          ''
-        );
-        return list!.length > 1 ? `(${str})[]` : `${str}[]`;
+        const list =
+          fields.customFieldIds ??
+          fields.customFieldCreatedAtList!.map((createdAt) => customs[createdAt]);
+        const str = list.reduce((a, id, index) => `${a}${index ? ' | ' : ''}${name}_${id}`, '');
+        return list.length > 1 ? `(${str})[]` : `${str}[]`;
       },
     };
     return types[kind]?.() || 'any';
