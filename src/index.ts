@@ -11,6 +11,7 @@ interface MicroCMSFieldType {
     | 'textArea'
     | 'number'
     | 'richEditor'
+    | 'richEditorV2'
     | 'select'
     | 'custom'
     | 'repeater'
@@ -48,6 +49,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       text: () => 'string',
       textArea: () => 'string',
       richEditor: () => 'string',
+      richEditorV2: () => 'string',
       number: () => 'number',
       select: () => {
         const { selectItems: list, multipleSelect } = fields;
@@ -61,7 +63,7 @@ export const convertSchema = (name: string, schema: MicroCMSSchemaType) => {
       date: () => 'string',
       media: () => 'MediaType',
       mediaList: () => 'MediaType[]',
-      file: () => '{ url: string }',
+      file: () => '{ url: string; fileSize: number }',
       custom: () => `${name}_${customs[fields.customFieldCreatedAt!]}`,
       repeater: () => {
         const list =
@@ -142,6 +144,7 @@ type MediaType = {
   url: string;
   width: number;
   height: number;
+  alt?: string;
 }
 type Structure<T, P> = T extends 'get'
   ? { id: string } & DateType & Required<P>
