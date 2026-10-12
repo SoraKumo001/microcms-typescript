@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"python - <<'PYEOF'\\np='src/index.ts'\\ns=open(p,encoding='utf-8').read()\\ndef rep(a,b):\\n    global s\\n    assert a in s, a\\n    s=s.replace(a,b)\\nrep(\\\"import { camelCase, pascalCase } fro...",
+  "error": "Exit code 2\nTraceback (most recent call last):\r\n  File \"<stdin>\", line 79, in <module>\r\n  File \"<stdin>\", line 5, in rep\r\nAssertionError:       output += `    '${name}': ${formatTypeName(name)}<'${method}'>\r\n`;\r\n src/utils.ts | 33 ++++++++++++++++++++++++++++++++-\n 1 file changed, 32 insertions(+), 1 deletion(-)\n✓ Lockfile passes supply-chain policies (verified 11d ago)\nLockfile is up to date, resolution step is skipped\nAlready up to date\n\nDone in 1.6s using pnpm v11.24.0\nsrc/utils.ts(40,14): er...",
+  "timestamp": "2026-10-12T00:31:57.747Z",
+  "retry_count": 2
+}

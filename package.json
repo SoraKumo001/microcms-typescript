@@ -1,7 +1,12 @@
 {
   "name": "microcms-typescript",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/*.tsbuildinfo"
+  ],
   "license": "MIT",
   "keywords": [
     "microcms",
@@ -14,6 +19,7 @@
     "start": "ts-node src schema sample/index.ts",
     "build": "tsc -b src",
     "test": "vitest run",
+    "lint": "eslint src/ && prettier -c src",
     "lint:fix": "eslint --fix src/ && prettier -w src"
   },
   "devDependencies": {

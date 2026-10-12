@@ -1,0 +1,167 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1791764653036,
+  "projectRoot": "C:\\prog\\npms\\microcms-typescript",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "vitest",
+        "version": "5.0.2",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": "pnpm test",
+    "lintCommand": null,
+    "devCommand": "pnpm start",
+    "scripts": {
+      "start": "ts-node src schema sample/index.ts",
+      "build": "tsc -b src",
+      "test": "vitest run",
+      "lint:fix": "eslint --fix src/ && prettier -w src"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": "*.test.ts",
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": true,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 5,
+      "lastAccessed": 1791764652971,
+      "keyFiles": [
+        "config.js",
+        "index.js",
+        "remote.js",
+        "tsconfig.tsbuildinfo",
+        "utils.js"
+      ]
+    },
+    "sample": {
+      "path": "sample",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1791764652972,
+      "keyFiles": [
+        "index.ts"
+      ]
+    },
+    "schema": {
+      "path": "schema",
+      "purpose": null,
+      "fileCount": 9,
+      "lastAccessed": 1791764652982,
+      "keyFiles": [
+        "api-contents-20210905132323.json",
+        "api-contents-20210905132840.json",
+        "api-news-20220804195333.json",
+        "api-news-categories-20220804195319.json",
+        "api-test2-20210905095055.json"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 5,
+      "lastAccessed": 1791764652983,
+      "keyFiles": [
+        "config.ts",
+        "index.ts",
+        "remote.ts",
+        "tsconfig.json",
+        "utils.ts"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 2,
+      "lastAccessed": 1791764652984,
+      "keyFiles": [
+        "config.test.ts",
+        "index.test.ts"
+      ]
+    },
+    "tests\\fixtures": {
+      "path": "tests\\fixtures",
+      "purpose": "Test fixtures",
+      "fileCount": 9,
+      "lastAccessed": 1791764652986,
+      "keyFiles": [
+        "api-contents-20210905132323.json",
+        "api-contents-20210905132840.json",
+        "api-news-20220804195333.json"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/utils.ts",
+      "accessCount": 3,
+      "lastAccessed": 1791765102058,
+      "type": "file"
+    },
+    {
+      "path": "tests/generated.test.ts",
+      "accessCount": 3,
+      "lastAccessed": 1791765163297,
+      "type": "file"
+    },
+    {
+      "path": ".scratch_tail.ts",
+      "accessCount": 1,
+      "lastAccessed": 1791765185302,
+      "type": "file"
+    },
+    {
+      "path": "tests/cli.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1791765211793,
+      "type": "file"
+    },
+    {
+      "path": "src/remote.ts",
+      "accessCount": 1,
+      "lastAccessed": 1791767097807,
+      "type": "file"
+    },
+    {
+      "path": "tests/remote.test.ts",
+      "accessCount": 1,
+      "lastAccessed": 1791767108699,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -22,7 +22,9 @@ export const loadConfig = (configPath?: string): ConfigOptions => {
       const content = fs.readFileSync(target, 'utf-8');
       return JSON.parse(content) as ConfigOptions;
     } catch (e) {
-      console.warn(`Warning: Failed to parse config file at ${target}:`, e);
+      throw new Error(`Failed to parse config file at ${target}: ${(e as Error).message}`, {
+        cause: e,
+      });
     }
   }
   return {};

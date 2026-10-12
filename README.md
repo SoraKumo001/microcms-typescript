@@ -81,6 +81,9 @@ npx microcms-typescript
 | `--api-key <key>`           | `-k`  | microCMS Management API key                                   |
 | `--pascal-case`             |       | Generate PascalCase type names instead of camelCase           |
 | `--config <path>`           | `-c`  | Path to custom configuration JSON file                        |
+| `--check`                   |       | Exit with an error if the output file is not up to date (for CI) |
+| `--help`                    | `-h`  | Show usage                                                    |
+| `--version`                 | `-v`  | Show version                                                  |
 
 ---
 
